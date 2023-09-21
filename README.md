@@ -1,2 +1,3 @@
 # drupal_timezone
-Drupal Timezone Assignment - Specbee
+ - Drupal Timezone Module
+ - Assignment - Specbee
