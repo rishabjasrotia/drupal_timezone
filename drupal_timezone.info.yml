@@ -1,0 +1,6 @@
+name: "Drupal Timezone Assignment Specbee"
+type: module
+description: "Provide site location and the current time for the location."
+package: Custom
+core_version_requirement: ^9 || ^10
+version: 1.0.0
