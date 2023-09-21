@@ -4,4 +4,4 @@ drupal_timezone.admin_settings:
     _form: '\Drupal\drupal_timezone\Form\TimezoneConfigForm'
     _title: 'Timezone Configuration'
   requirements:
-    _permission: 'administer site configurationn'
+    _permission: 'administer site configuration'

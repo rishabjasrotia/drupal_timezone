@@ -4,18 +4,12 @@ namespace Drupal\drupal_timezone\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\drupal_timezone\ModuleConstants;
 
 /**
  *  Timezone Configuration Form.
  */
 class TimezoneConfigForm extends ConfigFormBase {
-
-  /**
-   * Config settings.
-   *
-   * @var string
-   */
-  const SETTINGS = 'drupal_timezone.config';
 
   /**
    * {@inheritdoc}
@@ -28,14 +22,14 @@ class TimezoneConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return [static::SETTINGS];
+    return [ModuleConstants::SETTINGS];
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config(static::SETTINGS);
+    $config = $this->config(ModuleConstants::SETTINGS);
     $form['country'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Country'),
@@ -67,7 +61,6 @@ class TimezoneConfigForm extends ConfigFormBase {
       '#description' => $this->t('Select timezone.'),
       '#default_value' => $config->get('timezone'),
     ];
-
     return parent::buildForm($form, $form_state);
   }
 
@@ -75,7 +68,7 @@ class TimezoneConfigForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config(static::SETTINGS)
+    $this->config(ModuleConstants::SETTINGS)
       ->set('country', $form_state->getValue('country'))
       ->set('city', $form_state->getValue('city'))
       ->set('timezone', $form_state->getValue('timezone'))
