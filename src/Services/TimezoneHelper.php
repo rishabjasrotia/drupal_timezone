@@ -65,13 +65,28 @@ class TimezoneHelper {
     );
   }
 
-   /**
-   * Returns current time based on the time zone selection in config.
+  /**
+   * Returns formatted current time based on the time zone selection in config.
    *
    * @return string
    *   Returns formatted current date and time.
    */
   public function getFormattedDateTimeDetails() {
+    return $this->date_formatter->format(
+      $this->getCurrentTime(),
+      'custom',
+      'g:i A - l, d M Y',
+      $this->config->get('timezone') ?? NULL
+    );
+  }
+
+  /**
+   * Returns current time based on the time zone selection in config.
+   *
+   * @return string
+   *   Returns current date and time.
+   */
+  public function getDateTimeDetails() {
     return $this->date_formatter->format(
       $this->getCurrentTime(),
       'custom',

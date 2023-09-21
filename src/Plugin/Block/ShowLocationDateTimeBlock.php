@@ -3,9 +3,12 @@
 namespace Drupal\drupal_timezone\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\UncacheableDependencyTrait;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\PageCache\ResponsePolicy\KillSwitch;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\drupal_timezone\ModuleConstants;
+use Drupal\drupal_timezone\Services\TimezoneHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -27,6 +30,20 @@ class ShowLocationDateTimeBlock extends BlockBase implements ContainerFactoryPlu
   protected $config;
 
   /**
+   * TimezoneHelper object.
+   *
+   * @var \Drupal\drupal_timezone\Services\TimezoneHelper
+   */
+  protected $timezoneHelper;
+
+  /**
+   * The kill switch.
+   *
+   * @var \Drupal\Core\PageCache\ResponsePolicy\KillSwitch
+   */
+  protected $kill_switch;
+
+  /**
    * Constructs a ShowLocationDateTimeBlock object.
    *
    * @param array $configuration
@@ -37,15 +54,23 @@ class ShowLocationDateTimeBlock extends BlockBase implements ContainerFactoryPlu
    *   The plugin implementation definition.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory Interface.
+   * @param \Drupal\drupal_timezone\Services\TimezoneHelper $timezoneHelper
+   *   The TimezoneHelper service.
+   * @param \Drupal\Core\PageCache\ResponsePolicy\KillSwitch $kill_switch
+   *   The page cache kill switch service.
    */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    TimezoneHelper $timezoneHelper,
+    KillSwitch $kill_switch
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->config = $config_factory->get(ModuleConstants::SETTINGS);
+    $this->timezoneHelper = $timezoneHelper;
+    $this->kill_switch = $kill_switch;
   }
 
   /**
@@ -62,6 +87,8 @@ class ShowLocationDateTimeBlock extends BlockBase implements ContainerFactoryPlu
       $plugin_id,
       $plugin_definition,
       $container->get('config.factory'),
+      $container->get('drupal_timezone.timezonehelper'),
+      $container->get('page_cache_kill_switch')
     );
   }
 
@@ -69,9 +96,20 @@ class ShowLocationDateTimeBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function build() {
-    $city = $this->config->get('city');
+    $this->kill_switch->trigger();
+    $formattedDateTime = $this->timezoneHelper->getFormattedDateTimeDetails();
+    $dateTimeFormat = explode('-', $formattedDateTime);
     return [
-      '#markup' => '<p>City ' . $city . '</p>'
+      '#theme' => 'drupal_timezone_location',
+      '#country' => $this->config->get('country') ?? $this->t('India'),
+      '#city' => $this->config->get('city') ?? $this->t('Navi Mumbai'),
+      '#date_time' => $this->timezoneHelper->getDateTimeDetails(),
+      '#time' => $dateTimeFormat[0] ?? '',
+      '#date' => $dateTimeFormat[1] ?? '',
+      '#cache' => [
+        'contexts' => ['route'],
+        'tags' => $this->config->getCacheTags(),
+      ],
     ];
   }
 

@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ *
+ * To handle hooks for drupal_timezone module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function drupal_timezone_theme($existing, $type, $theme, $path) {
+  return [
+    'drupal_timezone_location' => [
+      'variables' => [
+        'country' => NULL,
+        'city' => NULL,
+        'date_time' => NULL,
+        'time' => NULL,
+        'date' => NULL,
+      ],
+    ],
+  ];
+}
