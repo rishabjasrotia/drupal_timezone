@@ -73,7 +73,7 @@ class TimezoneHelper {
    */
   public function getFormattedDateTimeDetails() {
     return $this->date_formatter->format(
-      $this->getCurrentTime(),
+      $this->getRequestTime(),
       'custom',
       'g:i A - l, d M Y',
       $this->config->get('timezone') ?? NULL
@@ -88,7 +88,7 @@ class TimezoneHelper {
    */
   public function getDateTimeDetails() {
     return $this->date_formatter->format(
-      $this->getCurrentTime(),
+      $this->getRequestTime(),
       'custom',
       'dS M Y - g:i A',
       $this->config->get('timezone') ?? NULL
@@ -96,13 +96,13 @@ class TimezoneHelper {
   }
 
   /**
-   * Returns current time.
+   * Returns current request time.
    *
    * @return string
-   *   Returns current time.
+   *   Returns current request time.
    */
-  public function getCurrentTime() {
-    return $this->time->getCurrentTime();
+  public function getRequestTime() {
+    return $this->time->getRequestTime();
   }
 
 
