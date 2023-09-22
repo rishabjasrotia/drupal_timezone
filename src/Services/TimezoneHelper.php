@@ -47,17 +47,19 @@ class TimezoneHelper {
    *   The date formatter service.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   A date time instance.
+   * @param Drupal\Core\StringTranslation\TranslationInterface $stringTranslation
+   *   A date time instance.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
     DateFormatter $date_formatter,
     TimeInterface $time,
-    TranslationInterface $TranslationInterface
+    TranslationInterface $stringTranslation
   ) {
     $this->config = $config_factory->get(ModuleConstants::SETTINGS);
     $this->date_formatter = $date_formatter;
     $this->time = $time;
-    $this->stringTranslation = $string_translation;
+    $this->stringTranslation = $stringTranslation;
   }
 
   /**
