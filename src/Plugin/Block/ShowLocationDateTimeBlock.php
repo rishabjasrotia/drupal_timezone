@@ -120,6 +120,9 @@ class ShowLocationDateTimeBlock extends BlockBase implements ContainerFactoryPlu
       '#date_time' => $this->timezoneHelper->getDateTimeDetails(),
       '#time' => $dateTimeFormat[0] ?? '',
       '#date' => $dateTimeFormat[1] ?? '',
+      '#cache' => [
+        'tags' => $this->config->getCacheTags(),
+      ],
     ];
     $this->renderer->addCacheableDependency($build, $config);
     return $build;
