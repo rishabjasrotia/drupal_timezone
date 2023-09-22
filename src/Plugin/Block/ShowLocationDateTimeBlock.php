@@ -103,7 +103,7 @@ class ShowLocationDateTimeBlock extends BlockBase implements ContainerFactoryPlu
     return [
       '#theme' => 'drupal_timezone_location',
       '#country' => $locationDetails['country'],
-      '#city' => $$locationDetails['city'],
+      '#city' => $locationDetails['city'],
       '#date_time' => $this->timezoneHelper->getDateTimeDetails(),
       '#time' => $dateTimeFormat[0] ?? '',
       '#date' => $dateTimeFormat[1] ?? '',

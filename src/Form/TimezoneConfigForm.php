@@ -5,11 +5,39 @@ namespace Drupal\drupal_timezone\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\drupal_timezone\ModuleConstants;
+use Drupal\drupal_timezone\Services\TimezoneHelper;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  *  Timezone Configuration Form.
  */
 class TimezoneConfigForm extends ConfigFormBase {
+
+  /**
+   * TimezoneHelper object.
+   *
+   * @var \Drupal\drupal_timezone\Services\TimezoneHelper
+   */
+  protected $timezoneHelper;
+
+  /**
+   * Constructs a TimezoneConfigForm object.
+   *
+   * @param \Drupal\drupal_timezone\Services\TimezoneHelper $timezoneHelper
+   *   The TimezoneHelper service.
+   */
+  public function __construct(TimezoneHelper $timezoneHelper) {
+    $this->timezoneHelper = $timezoneHelper;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('drupal_timezone.timezonehelper'),
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -48,16 +76,7 @@ class TimezoneConfigForm extends ConfigFormBase {
       '#type' => 'select',
       '#title' => $this->t('Timezone'),
       '#required' => TRUE,
-      '#options' => [
-        'America/Chicago' => $this->t('America/Chicago'),
-        'America/New_York' => $this->t('America/New_York'),
-        'Asia/Tokyo' => $this->t('Asia/Tokyo'),
-        'Asia/Dubai' => $this->t('Asia/Dubai'),
-        'Asia/Kolkata' => $this->t('Asia/Kolkata'),
-        'Europe/Amsterdam' => $this->t('Europe/Amsterdam'),
-        'Europe/Oslo' => $this->t('Europe/Oslo'),
-        'Europe/London' => $this->t('Europe/London'),
-      ],
+      '#options' => $this->timezoneHelper->getTimezoneList(),
       '#description' => $this->t('Select timezone.'),
       '#default_value' => $config->get('timezone'),
     ];

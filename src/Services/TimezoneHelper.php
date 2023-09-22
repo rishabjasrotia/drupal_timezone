@@ -5,6 +5,8 @@ namespace Drupal\drupal_timezone\Services;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatter;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\drupal_timezone\ModuleConstants;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -12,6 +14,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class TimezoneHelper.
  */
 class TimezoneHelper {
+
+  use StringTranslationTrait;
 
   /**
    * Config Factory Interface.
@@ -47,11 +51,13 @@ class TimezoneHelper {
   public function __construct(
     ConfigFactoryInterface $config_factory,
     DateFormatter $date_formatter,
-    TimeInterface $time
+    TimeInterface $time,
+    TranslationInterface $TranslationInterface
   ) {
     $this->config = $config_factory->get(ModuleConstants::SETTINGS);
     $this->date_formatter = $date_formatter;
     $this->time = $time;
+    $this->stringTranslation = $string_translation;
   }
 
   /**
@@ -117,7 +123,25 @@ class TimezoneHelper {
       'country' => $this->config->get('country') ?? NULL,
       'city' => $this->config->get('city') ?? NULL,
     ];
+  }
 
+  /**
+   * Returns list of timezone.
+   *
+   * @return array
+   *   Returns list of timezone.
+   */
+  public function getTimezoneList() {
+    return [
+      'America/Chicago' => $this->t('America/Chicago'),
+      'America/New_York' => $this->t('America/New_York'),
+      'Asia/Tokyo' => $this->t('Asia/Tokyo'),
+      'Asia/Dubai' => $this->t('Asia/Dubai'),
+      'Asia/Kolkata' => $this->t('Asia/Kolkata'),
+      'Europe/Amsterdam' => $this->t('Europe/Amsterdam'),
+      'Europe/Oslo' => $this->t('Europe/Oslo'),
+      'Europe/London' => $this->t('Europe/London'),
+    ];
   }
 
 }
