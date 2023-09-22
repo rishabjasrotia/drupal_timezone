@@ -124,7 +124,7 @@ class ShowLocationDateTimeBlock extends BlockBase implements ContainerFactoryPlu
         'tags' => $this->config->getCacheTags(),
       ],
     ];
-    $this->renderer->addCacheableDependency($build, $this->config);
+    $this->renderer->addCacheableDependency($build, $config);
     return $build;
   }
 
