@@ -109,7 +109,8 @@ class ShowLocationDateTimeBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function build() {
-    $this->kill_switch->trigger();
+    // Disable kill switch not good solution for now. 
+    // $this->kill_switch->trigger();
     $formattedDateTime = $this->timezoneHelper->getFormattedDateTimeDetails();
     $dateTimeFormat = explode('-', $formattedDateTime);
     $locationDetails = $this->timezoneHelper->getLocationDetails();
@@ -122,6 +123,7 @@ class ShowLocationDateTimeBlock extends BlockBase implements ContainerFactoryPlu
       '#date' => $dateTimeFormat[1] ?? '',
       '#cache' => [
         'tags' => $this->config->getCacheTags(),
+        'max-age' => 60,
       ],
     ];
     $this->renderer->addCacheableDependency($build, $this->config);
