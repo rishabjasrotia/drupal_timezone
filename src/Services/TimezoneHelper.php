@@ -105,4 +105,19 @@ class TimezoneHelper {
     return $this->time->getCurrentTime();
   }
 
+
+  /**
+   * Returns city country.
+   *
+   * @return string
+   *   Returns city and country.
+   */
+  public function getLocationDetails() {
+    return [
+      'country' => $this->config->get('country') ?? NULL,
+      'city' => $this->config->get('city') ?? NULL,
+    ];
+
+  }
+
 }

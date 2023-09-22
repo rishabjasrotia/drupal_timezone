@@ -99,10 +99,11 @@ class ShowLocationDateTimeBlock extends BlockBase implements ContainerFactoryPlu
     $this->kill_switch->trigger();
     $formattedDateTime = $this->timezoneHelper->getFormattedDateTimeDetails();
     $dateTimeFormat = explode('-', $formattedDateTime);
+    $locationDetails = $this->timezoneHelper->getLocationDetails();
     return [
       '#theme' => 'drupal_timezone_location',
-      '#country' => $this->config->get('country') ?? $this->t('India'),
-      '#city' => $this->config->get('city') ?? $this->t('Navi Mumbai'),
+      '#country' => $locationDetails['country'],
+      '#city' => $$locationDetails['city'],
       '#date_time' => $this->timezoneHelper->getDateTimeDetails(),
       '#time' => $dateTimeFormat[0] ?? '',
       '#date' => $dateTimeFormat[1] ?? '',
